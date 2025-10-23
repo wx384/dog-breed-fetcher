@@ -22,7 +22,7 @@ public class CachingBreedFetcher implements BreedFetcher {
     private int callsMade = 0;
 
     // instance variables
-    private Map cache = new HashMap();
+    private Map<String, List<String>> cache = new HashMap<>();
     private BreedFetcher fetcher;
 
     // constructor
@@ -42,7 +42,7 @@ public class CachingBreedFetcher implements BreedFetcher {
         // in cache, return list
         try {
             if (cache.containsKey(breed)) {
-                return (List<String>) cache.get(breed);
+                return cache.get(breed);
             }
             else {
                 List<String> subBreeds = fetcher.getSubBreeds(breed);
@@ -61,6 +61,28 @@ public class CachingBreedFetcher implements BreedFetcher {
             // callsMade++;
             // store list in cache
             // return
+
+
+       /*
+       // 1) Hit cache
+        List<String> cached = cache.get(key);
+        if (cached != null) {
+            return cached; // no unchecked cast needed
+        }
+
+        // 2) Miss -> delegate to underlying fetcher
+        try {
+            callsMade++; // count every underlying call
+            List<String> subBreeds = fetcher.getSubBreeds(breed);
+
+            // Only cache successful results (spec says: do NOT cache failures)
+            cache.put(key, subBreeds);
+            return subBreeds;
+        } catch (BreedNotFoundException e) {
+            // do not cache failures
+            throw e; // or: throw new BreedNotFoundException(breed, e); if you added that ctor
+        }
+        */
     }
 
     public int getCallsMade() {
